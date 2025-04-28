@@ -5,19 +5,19 @@ import numpy as np
 import yaml
 import os
 
-# Настройка стиля Streamlit
+# Стиль Стримлита
 st.set_page_config(
     page_title="Подводный Радар",
     page_icon="🌊",
     layout="wide"
 )
 
-# Загрузка конфигурационного файла
+# Загрузка конфига
 with open('sonar-seg.yaml', 'r') as f:
     config = yaml.safe_load(f)
 
-# Путь к модели (замените на путь к вашей обученной модели, если есть)
-model_path = "runs/segment/train/weights/best.pt"  # Используйте "best.pt" или другой файл, если обучали модель
+# Путь к модели
+model_path = "runs/segment/train/weights/best.pt"
 if not os.path.exists(model_path):
     st.error(f"Модель {model_path} не найдена. Убедитесь, что файл существует.")
 else:
@@ -26,13 +26,12 @@ else:
 
 # Функция для предсказания
 def predict(image):
-    # Убедимся, что изображение имеет три канала (RGB)
     if image.shape[-1] != 3:
         image = np.stack((image,) * 3, axis=-1)  # Преобразование в RGB, если изображение черно-белое
     results = model.predict(image)
     return results[0].plot()
 
-# Функция для добавления фонового изображения
+# Функция для добавления фонового изображения(????------)
 def add_background(image_path):
     page_bg_img = f"""
     <style>
@@ -51,16 +50,16 @@ def add_background(image_path):
     """
     st.markdown(page_bg_img, unsafe_allow_html=True)
 
-# Функция для добавления иконок
+
 def add_icons():
     st.markdown("""
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     """, unsafe_allow_html=True)
 
-# Добавление фонового изображения
-add_background("/Users/imac/Desktop/Diplom/projects/new_data2/interface")  # Убедитесь, что файл background.jpg существует
+# Добавление фонового изображения(?????-----)
+add_background("/Users/imac/Desktop/Diplom/projects/new_data2/interface")
 
-# Добавление иконок
+
 add_icons()
 
 # Главная страница
@@ -79,7 +78,7 @@ uploaded_image = st.file_uploader("Загрузите эхолотный сни�
 if uploaded_image is not None:
     # Открытие изображения
     image = Image.open(uploaded_image)
-    st.image(image, caption="Загруженное изображение", width=400)  # Уменьшение ширины изображения
+    st.image(image, caption="Загруженное изображение", width=400)
 
     # Преобразование изображения в NumPy массив
     image_np = np.array(image)
@@ -88,5 +87,5 @@ if uploaded_image is not None:
     if st.button("Сделать предсказание"):
         # Получение результата предсказания
         result_image = predict(image_np)
-        st.image(result_image, caption="Результат предсказания", width=400)  # Уменьшение ширины изображения
+        st.image(result_image, caption="Результат предсказания", width=400)
 
