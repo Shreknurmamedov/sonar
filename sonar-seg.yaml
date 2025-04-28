@@ -1,0 +1,11 @@
+path: /Users/imac/Desktop/Diplom/projects/new_data 2
+train: images/train
+val: images/val
+names:
+  0: obstacle
+  1: ground
+nc: 2
+
+# COCO annotations
+train_ann: annotations/train.json
+val_ann: annotations/val.json
